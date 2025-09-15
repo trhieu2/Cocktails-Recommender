@@ -2,16 +2,26 @@ import os
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from dotenv import load_dotenv
+import streamlit as st
 
 load_dotenv()
 
 class DatabaseSetup:
+    
     def __init__(self):
-        self.host = os.getenv('DB_HOST', 'localhost')
-        self.port = os.getenv('DB_PORT', '5432')
-        self.db_name = os.getenv('DB_NAME', 'cocktails_db')
-        self.user = os.getenv('DB_USER', 'postgres')
-        self.password = os.getenv('DB_PASSWORD', 'your_password')
+        
+        if "DB_HOST" in st.secrets:
+                self.host = st.secrets["DB_HOST"]
+                self.port = st.secrets["DB_PORT"]
+                self.db_name = st.secrets["DB_NAME"]
+                self.user = st.secrets["DB_USER"]
+                self.password = st.secrets["DB_PASSWORD"]
+        else:
+                self.host = os.getenv('DB_HOST', 'localhost')
+                self.port = os.getenv('DB_PORT', '5432')
+                self.db_name = os.getenv('DB_NAME', 'cocktails_db')
+                self.user = os.getenv('DB_USER', 'postgres')
+                self.password = os.getenv('DB_PASSWORD', 'your_password')
     
     def create_database(self):
         """Create the database if it doesn't exist"""
