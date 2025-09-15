@@ -9,19 +9,20 @@ load_dotenv()
 class DatabaseSetup:
     
     def __init__(self):
-        
-        if "DB_HOST" in st.secrets:
-                self.host = st.secrets["DB_HOST"]
-                self.port = st.secrets["DB_PORT"]
-                self.db_name = st.secrets["DB_NAME"]
-                self.user = st.secrets["DB_USER"]
-                self.password = st.secrets["DB_PASSWORD"]
-        else:
-                self.host = os.getenv('DB_HOST', 'localhost')
-                self.port = os.getenv('DB_PORT', '5432')
-                self.db_name = os.getenv('DB_NAME', 'cocktails_db')
-                self.user = os.getenv('DB_USER', 'postgres')
-                self.password = os.getenv('DB_PASSWORD', 'your_password')
+        self.host = st.secrets["DB_HOST"]
+        self.port = st.secrets["DB_PORT"]
+        self.db_name = st.secrets["DB_NAME"]
+        self.user = st.secrets["DB_USER"]
+        self.password = st.secrets["DB_PASSWORD"]
+
+    def get_connection(self):
+        return psycopg2.connect(
+            host=self.host,
+            port=self.port,
+            dbname=self.db_name,
+            user=self.user,
+            password=self.password
+        )
     
     def create_database(self):
         """Create the database if it doesn't exist"""
